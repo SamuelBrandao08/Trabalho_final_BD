@@ -4,42 +4,42 @@ import { FiArrowLeft } from 'react-icons/fi';
 
 import './style.css';
 
-import api from '../../services/api';
+import api from '../../../services/api';
 
-export default function NovaCategoria() {
+export default function NovaDespesa() {
     const [nome, setNome] = useState('');
-    const [teto, setTeto] = useState('');
+    const [valor, setValor] = useState('');
 
     const userId = localStorage.getItem('userId');
 
     const history = useHistory();
 
-    async function handleNewIncident(e) {
+    async function handleNewExpense(e) {
         e.preventDefault();
 
         const data = {
             nome,
-            teto,
+            valor,
         };
             
         try {
-            await api.post('categoria', data, {
+            await api.post('despesas', data, {
                 headers: {
                     Authorization: userId,
                 }
             })    
-            history.push('/categoria');
+            history.push('/despesasList');
         } catch (err) {
-            alert('Erro no cadastro, tente novamente.');
+            alert('Erro ao cadastrar a despesa, tente novamente.');
         }
     }
 
     return (
-        <div className="new-incident-container">
+        <div className="new-expense-container">
             <div className="content">
                 <section>
 
-                    <h1>Cadastrar nova categoria</h1>
+                    <h1>Cadastrar nova despesa</h1>
                     <p>Descreva o caso detalhadamente.</p>
 
                     <Link className="back-link" to="/profile">
@@ -48,7 +48,7 @@ export default function NovaCategoria() {
                     </Link>
                 </section>
 
-                <form onSubmit={handleNewIncident}>
+                <form onSubmit={handleNewExpense}>
                     <input 
                         placeholder="Nome da categoria"
                         value={nome}
@@ -56,9 +56,9 @@ export default function NovaCategoria() {
                     />
                     
                     <input 
-                        placeholder="Teto"
-                        value={teto}
-                        onChange={e => setTeto(e.target.value)} 
+                        placeholder="Valor"
+                        value={valor}
+                        onChange={e => setValor(e.target.value)} 
                     />
 
                     <button className="button" type="submit">Cadastrar</button>

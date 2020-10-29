@@ -1,42 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiPower } from 'react-icons/fi';
-import { FiTrash2 } from 'react-icons/fi';
 
 import api from '../../services/api';
-import './style.css'
+import './style.css';
 
 export default function Profile() {
-    const [categorias, setCategoria] = useState([]);
+    const [receitas, setReceita] = useState([]); 
+    const [despesas, setDespesa] = useState([]); 
+    //const [saldo, setSaldo] = useState([]);
 
     const history = useHistory();
 
-    const usuarioId = localStorage.getItem('userId'); 
-    const usuarioNome = localStorage.getItem('usuarioNome');
+
+    const usuarioId = localStorage.getItem('userId');
+    const usuarioNome = localStorage.getItem('userName');
 
     useEffect(() => {
-        api.get('categoria', {
+        api.get('profile','profile1', {
             headers: {
                 Authorization: usuarioId,
             }
-        }).then(response => {
-            setCategoria(response.data);
+        }).then(Response => {
+            setReceita(Response.data);
+            setDespesa(Response.data);
         })
+
+        // api.get('profile1', {
+        //     headers: {
+        //         Authorization: usuarioId,
+        //     }
+        // }).then(Response => {
+        //     setDespesa(Response.data);
+        // })
     }, [usuarioId]);
-
-    async function handleDeleteCategoria(id) {
-        try {
-            await api.delete(`categoria/${id}`, {
-                headers: {
-                    Authorization: usuarioId,
-                }
-            });
-
-            setCategoria(categorias.filter(categoria => categoria.id !== id));
-        } catch (err) {
-            alert('Erro ao deletar caso, tente novamente.');
-        }
-    }
 
     function handleLogout() {
         localStorage.clear();
@@ -44,41 +41,34 @@ export default function Profile() {
     }
 
     return (
+
         <div className="profile-container">
             <header>
-                <span>Bem vinda, {usuarioNome}</span>
+                <span>Bem vindo(a), {usuarioNome}</span>
 
-                <Link className="button" to="/categoria/new">Cadastrar nova categoria</Link>
+                <Link className="button" to="/categoria">Categorias</Link>
+                
                 <button onClick={handleLogout} type="button">
                     <FiPower size={18} color="#e02041" />
                 </button>
             </header>
+            
+            <main>
+                <strong>SALDO</strong>
+                <p>{Intl.NumberFormat('pt-BR', { style:'currency', currency: 'BRL' }).format()}</p>
 
-            <h1>Categorias cadastradas</h1>
+                <Link className="button" to="/receitas">
+                    <strong>RECEITAS</strong>
+                    <p>{Intl.NumberFormat('pt-BR', { style:'currency', currency: 'BRL' }).format(receitas.sum)}</p>
+                </Link>
 
-            <ul>
-                {categorias.map(categoria => (
-                    <li key={categoria.id_categoria}>
-                    <strong>ID:</strong>
-                    <p>{categoria.id_categoria}</p>
-
-                    <strong>NOME:</strong>
-                    <p>{categoria.nome}</p>
-
-                    <strong>TETO:</strong>
-                    <p>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(categoria.value)}</p>
-
-                    <strong>ID_USUARIO:</strong>
-                    <p>{categoria.id_usuario}</p>
-
-                    <button onClick={() => handleDeleteCategoria(categoria.id)} type="button">
-                        <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-                </li>
-                ))}
-
-                
-            </ul>
+                <Link className="button" to="/despesas/list">
+                    <strong>DESPESAS</strong>
+                    <p>{Intl.NumberFormat('pt-BR', { style:'currency', currency: 'BRL' }).format(despesas.sum)}</p>
+                </Link>
+            </main>
         </div>
+
     );
+
 }

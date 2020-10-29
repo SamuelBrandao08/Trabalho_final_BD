@@ -8,7 +8,7 @@ import './styles.css';
 
 
 export default function Register() {
-    const [nome, setName] = useState('');
+    const [nome, setNome] = useState('');
     const [senha, setSenha] = useState('');
     
 
@@ -52,7 +52,7 @@ export default function Register() {
                     <input 
                         placeholder="Nome do Usuario" 
                         value={nome}
-                        onChange={e => setName(e.target.value)}
+                        onChange={e => setNome(e.target.value)}
                     />
                     <input 
                         placeholder="Senha do Usuario" 

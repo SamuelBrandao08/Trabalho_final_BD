@@ -54,13 +54,13 @@ module.exports={
             const { id } = Request.params;
             const userId = Request.headers.authorization;
 
-            const categoria = await client.query("select id_usuario from categoria where id = $1 ", [id] );
+            const categoria = await client.query("select id_usuario from categoria where id_categoria = $1 ", [id] );
 
             if (categoria.rows[0].id_usuario != userId ) {
                 return Response.status(401).json({ error: 'Operation not permited.'});
             }
 
-            const queryDelete = "delete from categoria where id = $1"
+            const queryDelete = "delete from categoria where id_categoria = $1"
             await client.query(queryDelete, [id])
 
             done();

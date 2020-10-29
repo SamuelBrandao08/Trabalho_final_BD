@@ -56,24 +56,7 @@ module.exports={
             done();
             return Response.status(204).send();
         });
-     },
-
-     // Somar o valor total de receitas cadastradas por mes
-     async soma(Request, Response){
-        pool.connect(async function (err, client, done){
-
-            const userId = Request.headers.authorization;
-            const { mes } = Request.body;
-            
-            const receitas = await client.query("select sum(valor) from receitas where Extract('Month' From _data) = $1 and id_usuario = $2", [mes, userId]);
-            
-            console.log(receitas.rows);
-            
-            done();
-            return Response.json(receitas.rows);
-        });
     }
-
 
 
 }

@@ -11,23 +11,23 @@ export default function Login() {
     const [nome, setNome] = useState('');
     const [senha, setSenha] = useState('');
     const history = useHistory();
-    
+
+      
     async function handleLogin(e) {
         e.preventDefault();
-        console.log(nome, senha);
+        
         
         try {
             
-            const response = await api.post('session',  { nome, senha } );
-            console.log(response.data);
-            
-            const id = localStorage.setItem('userId', response.data);
-            const name = localStorage.setItem('usuarioNome', response.data.nome);
-            console.log("id e nome do usuario", id, name);
-            
+            const response = await api.post('session',  { nome, senha } ); 
+            const [user] = response.data
 
-            history.push('/categoria');
+            localStorage.setItem('userId', user.id_usuario);            
+            localStorage.setItem('userName', user.nome);
+
+            history.push('/profile');
         } catch (err) {
+            
             alert('Falha no login, tente novamente.')
         }
     }

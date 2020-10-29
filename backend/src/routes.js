@@ -1,6 +1,7 @@
 const express = require('express');
 
 const sessionController = require('./controllers/sessionController');
+const profileController = require('./controllers/profileController');
 const usuarioController = require('./controllers/usuarioController');
 const categoriaController = require('./controllers/categoriaController');
 const despesasController = require('./controllers/despesasController');
@@ -10,6 +11,10 @@ const routes = express.Router();
 
 
 routes.post('/session', sessionController.create);
+
+routes.get('/profile', profileController.somaReceitas)
+routes.get('/profile1', profileController.somaDespesas)
+routes.get('/profile2', profileController.somaDespesasCategoria)
 
 routes.post('/users', usuarioController.create);
 routes.get('/users', usuarioController.list);
@@ -22,11 +27,9 @@ routes.put('/categoria/:id', categoriaController.update);
 routes.delete('/categoria/:id', categoriaController.delete);
 
 routes.post('/despesas', despesasController.create);
-routes.get('/despesasList', despesasController.list);
-routes.get('/despesasList2', despesasController.listCategoria);
+routes.get('/despesas/list', despesasController.list);
+routes.get('/despesas/list2', despesasController.listCategoria);
 routes.delete('/despesas/:id', despesasController.delete);
-routes.get('/depesasSoma', despesasController.soma)
-routes.get('/despesasSoma2', despesasController.somaCategoria)
 
 routes.post('/receitas', receitasController.create);
 routes.get('/receitas', receitasController.list);

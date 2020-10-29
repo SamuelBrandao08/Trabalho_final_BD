@@ -20,19 +20,6 @@ module.exports={
         });
     },
 
-    // Funcao para listar todas as despesas de cada usuario   
-    /*async list (Request, Response){
-        pool.connect(async function (err, client, done){
-
-            const userId = Request.headers.authorization;
-            const despesas = await client.query("select * from despesas, categoria where categoria.id_usuario = $1", [userId]);
-            
-            
-            done();
-            return Response.json(despesas.rows);
-        });
-    },*/
-
     //Funcao para listar as despesas de um determinado mes     
     async list(Request, Response){
         pool.connect(async function (err, client, done){
@@ -84,36 +71,7 @@ module.exports={
             done();
             return Response.status(204).send();
         });
-    },
-
-     //Funcao para somar as despesas do usuario em um determinado mes
-     async soma(Request, Response){
-        pool.connect(async function (err, client, done){
-
-            const { mes } = Request.body
-            const userId = Request.headers.authorization;
-            
-            const despesas = await client.query("select  sum(valor) from despesas d inner join categoria c using (id_categoria) where Extract('Month' From _data) = $1 and id_usuario = $2", [mes, userId]);
-            
-            done();
-
-            return Response.json(despesas.rows);
-        });
-    },
-
-     //Funcao para somar as despesas do usuario em um determinado mes ordenando por categoria   
-    async somaCategoria(Request, Response){
-        pool.connect(async function (err, client, done){
-
-            const { mes } = Request.body
-            const userId = Request.headers.authorization;
-            
-            const despesas = await client.query("select c.nome, sum(d.valor) as soma from despesas d inner join categoria c using (id_categoria) where Extract('Month' From _data) = $1 and id_usuario = $2 and d.id_categoria = c.id_categoria group by c.nome;", [mes, userId]);
-            
-            done();
-
-            return Response.json(despesas.rows);
-        });
     }
+     
 
 };
